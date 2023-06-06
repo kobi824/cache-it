@@ -1,7 +1,11 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
+	"net/http"
+	"strconv"
 )
 
 type Book struct {
@@ -27,6 +31,31 @@ func NewServer() *Server {
 		db:    db,
 		cache: make(map[int]*Book),
 	}
+}
+
+func (s *Server) GetBook(w http.ResponseWriter, r *http.Request) {
+	urlId := r.URL.Query().Get("id")
+	id, _ := strconv.Atoi(urlId)
+
+	book, ok := s.useCache(id)
+	if ok {
+		json.NewEncoder(w).Encode(book)
+		return
+	}
+
+	book, ok = s.db[id]
+	if !ok {
+		log.Printf("given id does not return a book %v", s.db[id])
+	}
+	s.count++
+
+	s.cache[id] = book
+	json.NewEncoder(w).Encode(book)
+}
+
+func (s *Server) useCache(id int) (*Book, bool) {
+	book, ok := s.cache[id]
+	return book, ok
 }
 
 func main() {

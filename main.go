@@ -21,7 +21,7 @@ type Server struct {
 
 func NewServer() *Server {
 	db := make(map[int]*Book)
-	for i, _ := range [4000]int{} {
+	for i, _ := range [1000]int{} {
 		db[i+1] = &Book{
 			ID:    i + 1,
 			Title: fmt.Sprintf("Book-%d", i+1),

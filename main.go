@@ -45,7 +45,8 @@ func (s *Server) GetBook(w http.ResponseWriter, r *http.Request) {
 
 	book, ok = s.db[id]
 	if !ok {
-		log.Printf("given id does not return a book %v", s.db[id])
+		// better ways to handle error
+		log.Panicf("given id does not return a book %v", s.db[id])
 	}
 	s.count++
 

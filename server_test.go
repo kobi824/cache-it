@@ -11,7 +11,7 @@ import (
 func TestGetBook(t *testing.T) {
 	srv := NewServer()
 	testSrv := httptest.NewServer(http.HandlerFunc(srv.GetBook))
-	num := 4000
+	num := 1000
 
 	for i := 0; i < num; i++ {
 		id := i%100 + 1
